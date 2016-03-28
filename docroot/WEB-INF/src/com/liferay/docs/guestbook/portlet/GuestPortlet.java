@@ -8,6 +8,7 @@ import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import com.liferay.docs.guestbook.model.Entry;
 import com.liferay.docs.guestbook.model.Guestbook;
 import com.liferay.docs.guestbook.service.EntryLocalServiceUtil;
 import com.liferay.docs.guestbook.service.GuestbookLocalServiceUtil;
@@ -115,9 +116,10 @@ public class GuestPortlet extends MVCPortlet {
 	public void addGuestbook(ActionRequest request,ActionResponse response) 
 			throws PortalException, SystemException{
 		
-		ServiceContext serviceContext = ServiceContextFactory.getInstance(request);
+		ServiceContext serviceContext = ServiceContextFactory.getInstance(Guestbook.class.getName(),request);
 		
 		String name = ParamUtil.getString(request, "name");
+		
 		try{
 			GuestbookLocalServiceUtil.addGuestbook(serviceContext.getUserId(),
 					name,serviceContext);
@@ -133,11 +135,11 @@ public class GuestPortlet extends MVCPortlet {
 	public void addEntry(ActionRequest request,ActionResponse response) 
 			throws PortalException, SystemException{
 		
-		ServiceContext serviceContext = ServiceContextFactory.getInstance(request);
+		ServiceContext serviceContext = ServiceContextFactory.getInstance(Entry.class.getName(),request);
 		
 		String name = ParamUtil.getString(request, "name");
 		String email = ParamUtil.getString(request, "email");
-		String message = ParamUtil.getString(request, "meassge");
+		String message = ParamUtil.getString(request, "message");
 		long guestbookId = ParamUtil.getLong(request,"guestbookId");
 		
 		try{
@@ -170,7 +172,7 @@ public class GuestPortlet extends MVCPortlet {
 				guestbookId = guestbook.getGuestbookId();
 			}
 			
-			if(!(guestbooks.size()>0)){
+			if(!(guestbookId>0)){
 				
 				guestbookId = guestbooks.get(0).getGuestbookId();
 			}
